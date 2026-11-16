@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>소재 가이드 담기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f2fb; --panel: #ffffff; --line: #ece9f6; --text: #2b2a3a; --muted: #8a87a0;
+    --accent: #7b6cf6; --accent-2: #9d8cff; --accent-soft: #efecff;
+    --shadow: 0 6px 24px rgba(108, 92, 231, .08), 0 1px 3px rgba(43, 42, 58, .04);
+    --radius: 18px;
+    --text-c: #f3a95b;  --text-bg: #fff3e6;
+    --img-c: #5ec08b;   --img-bg: #e7f7ee;
+    --vid-c: #6f9cf3;   --vid-bg: #e8f0ff;
+    --etc-c: #e47fa8;   --etc-bg: #fde9f1;
+    --ok: #3fae74; --warn: #e29a3b; --miss: #c9c6d6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif; color: var(--text); font-size: 14px;
+    background: radial-gradient(1200px 600px at 0% 0%, #ebe6ff 0%, transparent 60%),
+                radial-gradient(900px 500px at 100% 100%, #e6f0ff 0%, transparent 60%), var(--bg);
+    min-height: 100vh;
+  }
+  button, input { font-family: inherit; }
+
+  .app { display: grid; grid-template-columns: 232px 1fr 330px; gap: 22px; padding: 22px; align-items: start; }
+
+  /* ---------- 사이드바 ---------- */
+  .sidebar { background: rgba(255,255,255,.75); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: var(--shadow);
+             padding: 20px 14px; position: sticky; top: 22px; max-height: calc(100vh - 44px); overflow: auto; }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 0 8px 18px; font-weight: 700; font-size: 17px; }
+  .brand-icon { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; color: #fff;
+                background: linear-gradient(135deg, var(--accent-2), var(--accent)); box-shadow: 0 4px 12px rgba(123,108,246,.35); }
+  .media-list .group-label { font-size: 11px; color: var(--muted); padding: 14px 10px 6px; letter-spacing: .02em; }
+  .media-list button { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 9px 12px;
+                       border: 0; background: none; border-radius: 12px; cursor: pointer; font-size: 14px; text-align: left; color: #4a4860; }
+  .media-list button:hover { background: var(--accent-soft); }
+  .media-list button.active { background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #fff; font-weight: 500;
+                              box-shadow: 0 6px 16px rgba(123,108,246,.3); }
+  .media-list button.active .dot { background: #fff; }
+  .media-list button small { background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 1px 8px; font-size: 11px; font-weight: 700; }
+  .media-list button.active small { background: rgba(255,255,255,.25); color: #fff; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .dot.ok { background: var(--ok); } .dot.partial { background: var(--warn); } .dot.missing { background: var(--miss); }
+
+  /* ---------- 본문 ---------- */
+  .main { min-width: 0; }
+  .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .search { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--panel); border-radius: 14px; padding: 0 14px;
+            box-shadow: var(--shadow); max-width: 440px; }
+  .search input { border: 0; outline: 0; padding: 12px 0; width: 100%; font-size: 14px; background: none; color: var(--text); }
+  .search svg { color: var(--muted); flex: none; }
+  .hello h1 { margin: 0 0 4px; font-size: 24px; }
+  .hello p { margin: 0 0 18px; color: var(--muted); font-size: 13px; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
+  .stat { border-radius: var(--radius); padding: 16px; display: flex; gap: 12px; align-items: center; box-shadow: var(--shadow); }
+  .stat .ico { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; color: #fff; flex: none; }
+  .stat .label { font-size: 12px; color: #6b6880; }
+  .stat .num { font-size: 22px; font-weight: 700; line-height: 1.2; }
+  .stat .sub { font-size: 11px; color: var(--muted); }
+  .stat.text { background: var(--text-bg); } .stat.text .ico { background: var(--text-c); }
+  .stat.image { background: var(--img-bg); } .stat.image .ico { background: var(--img-c); }
+  .stat.video { background: var(--vid-bg); } .stat.video .ico { background: var(--vid-c); }
+  .stat.etc { background: var(--etc-bg); } .stat.etc .ico { background: var(--etc-c); }
+
+  .media-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .media-head h2 { margin: 0; font-size: 19px; }
+  .badge { font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 700; }
+  .badge.ok { background: var(--img-bg); color: var(--ok); } .badge.partial { background: var(--text-bg); color: var(--warn); }
+  .badge.missing { background: #f0eef6; color: var(--muted); }
+  .note { color: var(--muted); font-size: 12px; }
+
+  .product { background: var(--panel); border-radius: var(--radius); margin-bottom: 18px; overflow: hidden; box-shadow: var(--shadow); }
+  .product-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 16px 20px 12px; flex-wrap: wrap; }
+  .product-head h3 { margin: 0 0 2px; font-size: 16px; }
+  .product-head a { font-size: 12px; color: var(--muted); text-decoration: none; }
+  .product-head a:hover { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 10px 14px; text-align: left; vertical-align: middle; }
+  th { font-size: 12px; color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--line); }
+  td { border-bottom: 1px solid #f5f3fb; }
+  tbody:last-child tr:last-child td { border-bottom: 0; }
+  tr.in-cart td { background: #faf9ff; }
+  td.check { width: 44px; padding-left: 20px; }
+  td.type { width: 80px; white-space: nowrap; }
+  td.name { width: 200px; font-weight: 500; }
+  td.spec { color: #5d5a73; font-size: 13px; }
+  tr.group-row td { background: #faf9fe; border-top: 1px solid var(--line); padding-top: 9px; padding-bottom: 9px; }
+  tr.group-row b { font-size: 13px; margin-right: 6px; }
+  input[type=checkbox] { width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; vertical-align: middle; }
+
+  .type-tag { font-size: 11px; padding: 3px 9px; border-radius: 8px; font-weight: 500; }
+  .type-tag.text { background: var(--text-bg); color: #c27a2c; }
+  .type-tag.image, .type-tag.logo { background: var(--img-bg); color: #2f8d5b; }
+  .type-tag.video { background: var(--vid-bg); color: #3f6fd0; }
+  .type-tag.html5, .type-tag.etc { background: var(--etc-bg); color: #c2507f; }
+
+  .empty { background: var(--panel); border-radius: var(--radius); padding: 40px; text-align: center; color: var(--muted); box-shadow: var(--shadow); line-height: 1.8; }
+
+  .btn { border: 0; background: var(--accent-soft); border-radius: 12px; padding: 8px 14px; font-size: 13px; cursor: pointer; color: var(--accent); font-weight: 500; }
+  .btn:hover { background: #e3defe; }
+  .btn.primary { background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #fff; box-shadow: 0 6px 16px rgba(123,108,246,.3); }
+  .btn.primary:hover { filter: brightness(1.05); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+
+  /* ---------- 장바구니 ---------- */
+  .cart { background: var(--panel); border-radius: 24px; position: sticky; top: 22px; display: flex; flex-direction: column;
+          max-height: calc(100vh - 44px); box-shadow: var(--shadow); }
+  .cart-head { padding: 20px 20px 8px; display: flex; justify-content: space-between; align-items: center; }
+  .cart-head h3 { margin: 0; font-size: 16px; }
+  .cart-head h3 span { background: var(--accent); color: #fff; border-radius: 999px; padding: 1px 9px; font-size: 12px; margin-left: 4px; }
+  .cart-body { overflow: auto; padding: 4px 20px; flex: 1; }
+  .cart-group { margin: 10px 0 12px; background: #faf9fe; border-radius: 14px; padding: 10px 12px; }
+  .cart-group-title { font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+  .cart-item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 5px 0; font-size: 13px; }
+  .cart-item small { margin-left: 4px; }
+  .cart-item button { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 17px; line-height: 1; border-radius: 6px; }
+  .cart-item button:hover { color: #d9534f; }
+  .cart-foot { padding: 14px 20px 20px; border-top: 1px solid var(--line); display: grid; gap: 10px; }
+  .cart-foot label { font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+  .cart-foot .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .cart-foot .btn { padding: 11px 10px; }
+
+  .modal-bg { position: fixed; inset: 0; background: rgba(43,42,58,.35); display: none; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(3px); }
+  .modal-bg.show { display: flex; }
+  .modal { background: var(--panel); border-radius: 22px; padding: 24px 28px; max-width: 440px; box-shadow: var(--shadow); }
+  .modal h3 { margin-top: 0; }
+  .name-wrap { display: flex; align-items: center; gap: 10px; }
+  .thumb { position: relative; flex: none; width: 46px; height: 46px; border: 0; border-radius: 12px; background: #f7f5ff; cursor: zoom-in;
+           display: grid; place-items: center; padding: 0; transition: transform .15s, box-shadow .15s; }
+  .thumb:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(123,108,246,.25); }
+  .thumb i { position: absolute; right: -4px; bottom: -4px; font-style: normal; font-size: 10px; font-weight: 700; background: var(--accent); color: #fff; border-radius: 999px; padding: 0 5px; }
+  .thumb em { position: absolute; left: -4px; top: -6px; font-style: normal; font-size: 9px; font-weight: 700; background: var(--etc-c); color: #fff; border-radius: 6px; padding: 0 4px; }
+  .modal.preview { max-width: 720px; width: 100%; max-height: calc(100vh - 32px); overflow: auto; }
+  .preview-shapes { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; background: #faf9fe; border-radius: 16px; padding: 16px; margin: 12px 0; }
+  .preview-ref img { max-width: 100%; border-radius: 12px; border: 1px solid var(--line); }
+  .safe-note { background: var(--etc-bg); color: #b23a6c; border-radius: 12px; padding: 10px 12px; font-size: 13px; }
+  .modal ol { padding-left: 18px; line-height: 1.9; }
+
+  @media (max-width: 1200px) { .app { grid-template-columns: 210px 1fr; } .cart { grid-column: 1 / -1; position: static; max-height: none; } }
+  @media (max-width: 800px) {
+    .app { grid-template-columns: 1fr; padding: 16px; gap: 16px; }
+    .sidebar { position: static; max-height: none; padding: 12px; }
+    .brand { padding-bottom: 10px; }
+    .media-list { display: flex; overflow-x: auto; gap: 4px; }
+    .media-list button { width: auto; white-space: nowrap; flex: none; }
+    .media-list .group-label { display: none; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    td.name { width: auto; }
+    td.type, thead th:nth-child(2) { display: none; }
+    td.check { padding-left: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>
+      </div>
+      소재 가이드
+    </div>
+    <nav class="media-list" id="mediaList"></nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <label class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="search" type="search" placeholder="항목·규격 검색 (예: 1200×628, 광고 제목)" aria-label="항목 검색">
+      </label>
+    </div>
+    <div class="hello">
+      <h1>필요한 소재 가이드를 담아보세요</h1>
+      <p id="checkedAt"></p>
+    </div>
+    <section class="stats" id="stats"></section>
+    <div id="content"></div>
+  </main>
+
+  <aside class="cart">
+    <div class="cart-head">
+      <h3>담은 항목<span id="cartCount">0</span></h3>
+      <button class="btn" id="clearCart">비우기</button>
+    </div>
+    <div class="cart-body" id="cartBody"></div>
+    <div class="cart-foot">
+      <label><input type="checkbox" id="optUrl" checked> 텍스트 표에 ‘최종 URL’ 줄 추가</label>
+      <div class="row">
+        <button class="btn primary" id="exportExcel">엑셀 다운로드</button>
+        <button class="btn" id="exportSheets">구글 시트로 열기</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="modal-bg" id="sheetsModal">
+  <div class="modal">
+    <h3>구글 시트로 여는 방법</h3>
+    <p>엑셀 파일을 방금 내려받았습니다. 아래 순서로 구글 시트에서 열 수 있어요.</p>
+    <ol>
+      <li>열린 구글 드라이브 창에 내려받은 <b>.xlsx 파일</b>을 끌어다 놓기</li>
+      <li>올라간 파일을 더블클릭 → 위쪽 <b>‘Google 스프레드시트로 열기’</b></li>
+      <li>필요하면 <b>파일 → Google 스프레드시트로 저장</b></li>
+    </ol>
+    <p class="note">글자 수 계산 수식과 초과 시 빨간색 표시는 구글 시트에서도 그대로 동작합니다.</p>
+    <button class="btn primary" id="closeModal">확인</button>
+  </div>
+</div>
+
+<div class="modal-bg" id="previewModal">
+  <div class="modal preview">
+    <h3 id="previewTitle"></h3>
+    <p class="note" id="previewSpec"></p>
+    <div class="preview-shapes" id="previewShapes"></div>
+    <p class="safe-note" id="previewSafe" hidden></p>
+    <div class="preview-ref" id="previewRef"></div>
+    <p class="note">비율 그림은 가이드에 적힌 비율·크기를 그대로 그린 것입니다. 실제 크기와 같은 배율은 아닙니다.</p>
+    <button class="btn primary" id="closePreview">닫기</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+<script src="guide-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
